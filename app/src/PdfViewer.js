@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
+// import PDFObject from "pdfobject"
 
 const PdfViewer = () => {
-    const fileUrl = "https://clickdimensions.com/links/TestPDFfile.pdf"
+    const fileUrl = "https://www.orimi.com/pdf-test.pdf"
     useEffect(() => {
         const pdfObject = require('pdfobject');
         pdfObject.embed(fileUrl + '#toolbar=0', '#pdf-viewer');

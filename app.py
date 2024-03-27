@@ -7,13 +7,14 @@ import time
 import botocore
 import botocore.exceptions
 from flask import Flask
+from flask_cors import CORS, cross_origin
 
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
 secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 session_token = os.getenv("AWS_SESSION_TOKEN")
 
 bucket = "ndrc-lloyd-george-store"
-key = "lloyd_george.pdf"
+key = "pdf-test.pdf"
 
 s3 = boto3.client(
     "s3",
@@ -32,6 +33,7 @@ textract = boto3.client(
 )
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 
 def upload_file():
@@ -42,13 +44,14 @@ def upload_file():
             with open("data/lloyd_george.pdf", "rb") as data:
                 file_bytes = data.read()
 
-            s3.put_object(Bucket=bucket, Key="lloyd_george.pdf", Body=file_bytes)
+            s3.put_object(Bucket=bucket, Key=key, Body=file_bytes)
         else:
             print("Error uploading file")
             exit(1)
 
 
 @app.route('/extract', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def extract():
     upload_file()
 
